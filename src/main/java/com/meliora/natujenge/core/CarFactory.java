@@ -5,22 +5,21 @@ import com.meliora.natujenge.domain.Car;
 import com.meliora.natujenge.exceptions.CarNotFoundException;
 import org.reflections.Reflections;
 
-import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 public class CarFactory {
-    private Map<String, Car> cars;
+    private Map<String, Car> carsInTheYard;
 
     public CarFactory(String packageName) {
-        this.cars = new HashMap<String, Car>();
+        this.carsInTheYard = new HashMap<String, Car>();
 
         System.out.println("Starting to initialize all cars defined...");
 
         initializeCars(packageName);
 
-        System.out.println("Initialized the cars " + cars);
+        System.out.println("Initialized the cars " + carsInTheYard);
     }
 
     public void initializeCars(String packageName) {
@@ -37,16 +36,20 @@ public class CarFactory {
 
             Car car = new Car(carDetails.numberPlate(), carDetails.model(), carDetails.color(), carDetails.year(), carDetails.engineSize());
 
-            this.cars.put(carDetails.numberPlate(), car);
+            this.carsInTheYard.put(carDetails.numberPlate(), car);
         }
     }
 
     public Car getCarByNumberPlate(String numberPlate) throws CarNotFoundException {
-        Car car = this.cars.get(numberPlate);
+        Car car = this.carsInTheYard.get(numberPlate);
 
         if (car == null) {
             throw new CarNotFoundException("Car with the number plate " + numberPlate + " was not found in our yard");
         }
         return car;
+    }
+
+    public Map<String, Car> getAllCarsInTheYard() {
+        return this.carsInTheYard;
     }
 }
